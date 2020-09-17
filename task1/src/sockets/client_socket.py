@@ -9,6 +9,7 @@ class ClientSocket(AppSocket):
     NO_FREE_PORTS_ERROR = 'No free ports available, please try later'
     BIND_ERROR = "Can't bind to {address}"
     CONNECTION_ERROR = "Can't connect to {s_address}:{s_port} from {address}:{port}"
+    CONNECTION_SUCCESS = "Client {address}:{port} connected to {s_address}:{s_port}"
 
     def __init__(self, config):
         super().__init__(config)
@@ -32,8 +33,14 @@ class ClientSocket(AppSocket):
     def _connect(self):
         try:
             self.socket.connect((self.config['s_address'], self.config['s_port']))
+            logging.info(ClientSocket.CONNECTION_SUCCESS.format(**self.config))
         except socket.error as e:
             self.exit(ClientSocket.CONNECTION_ERROR.format(**self.config) + f'\n{e}', 1)
 
+    def _set_name(self):
+        while True:
+            pass
+
     def start(self):
         self._connect()
+        self._set_name()

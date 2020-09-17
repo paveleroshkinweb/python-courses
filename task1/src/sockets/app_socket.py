@@ -1,7 +1,6 @@
 from .socket_helper import SocketHelper
 import socket
 import sys
-from contextlib import suppress
 import logging
 
 
@@ -12,9 +11,8 @@ class AppSocket(SocketHelper):
         self.config = config
 
     def exit(self, msg='', code=0):
-        with suppress(Exception):
-            sys.stdout.flush()
-            self.socket.close()
+        sys.stdout.flush()
+        self.close()
         if msg:
             if code != 0:
                 logging.error(msg)
