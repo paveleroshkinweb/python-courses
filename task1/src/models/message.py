@@ -22,3 +22,7 @@ class Message(Entity):
         self.success = success
         self.error = error
         self.timestamp = timestamp or time.time()
+
+    @staticmethod
+    def from_bytes(obj_bytes):
+        return Entity.from_bytes(obj_bytes, Message)
