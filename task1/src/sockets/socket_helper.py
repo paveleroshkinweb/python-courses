@@ -28,7 +28,7 @@ class SocketHelper:
     def send_message(self, message):
         with self.lock:
             if self.closed:
-                raise SocketIOError(f"Can't send message due to closed socket")
+                raise SocketIOError(f"Can't send message \n{message}\n due to closed socket")
             json_message = message.to_json()
             packet = json_message.encode()
             packet_length = SocketHelper.header_struct.pack(len(packet))
@@ -36,13 +36,12 @@ class SocketHelper:
                 self.socket.send(packet_length)
                 self.socket.sendall(packet)
             except socket.error as e:
-                logging.error(f"Can't send \n{json_message}\n, {e}")
-                raise SocketIOError() from e
+                raise SocketIOError(f"Can't send \n{message}\n, {e}")
 
     def receive_message(self):
         with self.lock:
             if self.closed:
-                raise SocketIOError(f"Can't recieve message due to closed socket")
+                raise SocketIOError(f"Can't receive message due to closed socket")
             message_length_bytes = self._recv_all(SocketHelper.header_struct.size)
             message_length = SocketHelper.header_struct.unpack(message_length_bytes)[0]
             message_bytes = self._recv_all(message_length)
@@ -56,9 +55,10 @@ class SocketHelper:
             try:
                 chunk = self.socket.recv(length)
             except socket.error as e:
-                logging.error(f"Can't get message because of {e}")
-                raise SocketIOError() from e
+                raise SocketIOError(f"Can't get message because of {e}")
             if not chunk:
-                raise SocketIOError(f'Socket closed with {length - len(data)} bytes left')
+                raise SocketIOError(
+                    f'Socket {self.socket.getsockname()} closed with {length - len(data)} bytes left'
+                )
             data += chunk
         return data
