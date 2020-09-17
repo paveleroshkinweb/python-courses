@@ -36,7 +36,6 @@ class ServerSocket(AppSocket):
 
     def start(self):
         self._listen()
-        # handle exceptions !
         with ThreadPoolExecutor(max_workers=ServerSocket.MAX_CLIENTS) as executor:
             while True:
                 client_socket, address = self.socket.accept()
