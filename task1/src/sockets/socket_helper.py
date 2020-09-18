@@ -11,16 +11,17 @@ from utils.lock import lock
 @lock(['close', 'send_message', 'receive_message', 'broadcast_message', 'send'], threading.RLock)
 class SocketHelper:
 
-    def __init__(self, sock):
+    def __init__(self, sock, use_logging=True):
         self.socket = sock
         self.closed = False
+        self.use_logging = use_logging
 
     def close(self):
         try:
             self.socket.close()
             self.closed = True
         except socket.error as e:
-            logging.error(f"Couldn't close socket {self.socket.getsockname}\n{e}")
+            self.log_error(f"Couldn't close socket {self.socket.getsockname}\n{e}")
 
     def send_message(self, message):
         packet_length, packet = message.to_bytes()
@@ -31,6 +32,7 @@ class SocketHelper:
         message_length = Entity.header_struct.unpack(message_length_bytes)[0]
         message_bytes = self._recv_all(message_length)
         message = Message.from_bytes(message_bytes)
+        self.log_info(f"Got a message {message} from {self.socket.getsockname()}")
         return message
 
     def broadcast_message(self, message, sockets):
@@ -39,12 +41,12 @@ class SocketHelper:
             if self.socket != sock:
                 with suppress(SocketIOError):
                     sock.send(packet_length, packet)
-                    yield message, sock  # ??? if I need it
 
     def send(self, length_bytes, message_bytes):
         try:
             self.socket.send(length_bytes)
             self.socket.sendall(message_bytes)
+            self.log_info(f"Sent a message {message_bytes.decode()} to {self.socket.getsockname()}")
         except socket.error as e:
             raise SocketIOError(f"Can't send \n{message_bytes.decode()}\n, {e}")
 
@@ -58,3 +60,13 @@ class SocketHelper:
                 )
             data += chunk
         return data
+
+    def log(self, level, text):
+        if self.use_logging:
+            getattr(logging, level)(text)
+
+    def log_info(self, text):
+        self.log('info', text)
+
+    def log_error(self, text):
+        self.log('error', text)

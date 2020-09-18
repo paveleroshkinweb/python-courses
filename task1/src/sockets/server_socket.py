@@ -16,7 +16,7 @@ class ServerSocket(AppSocket):
     MAX_CLIENTS = 2048
 
     def __init__(self, config):
-        super().__init__(config)
+        super().__init__(config, use_logging=True)
         self.users = {}
         self._configure()
 

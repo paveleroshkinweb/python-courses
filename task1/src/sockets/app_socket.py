@@ -6,8 +6,8 @@ import logging
 
 class AppSocket(SocketHelper):
 
-    def __init__(self, config):
-        super().__init__(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
+    def __init__(self, config, use_logging=True):
+        super().__init__(socket.socket(socket.AF_INET, socket.SOCK_STREAM), use_logging)
         self.config = config
 
     def exit(self, msg='', code=0):
