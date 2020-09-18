@@ -1,5 +1,6 @@
-from .entity import Entity
 import time
+
+from .entity import Entity
 
 
 class Message(Entity):
@@ -7,6 +8,7 @@ class Message(Entity):
     def __init__(self,
                  message_type,
                  from_whom,
+                 system_type=None,
                  content=None,
                  selected_users=None,
                  command=None,
@@ -17,6 +19,7 @@ class Message(Entity):
         self.message_type = message_type
         self.content = content
         self.from_whom = from_whom
+        self.system_type = system_type
         self.selected_users = selected_users
         self.command = command
         self.success = success

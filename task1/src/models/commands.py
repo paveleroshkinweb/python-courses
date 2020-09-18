@@ -6,5 +6,5 @@ class Command(str, enum.Enum):
     PARTICIPANTS_COUNT = 'participants_count',
     PARTICIPANTS = 'participants',
     PRIVATE_MESSAGE = 'private_message',
-    CREATE_NEW_USER = 'create_new_user',
-    EXIT = 'exit'
+    GAME_STEP = 'game_step'
+
