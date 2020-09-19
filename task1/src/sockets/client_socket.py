@@ -5,12 +5,14 @@ import sys
 from models.message import Message
 import threading
 from .app_socket import AppSocket
+from helpers.client_helper import ClientHelper
 
 
 class ClientSocket(AppSocket):
 
     def __init__(self, config):
         super().__init__(config, use_logging=False)
+        self.client_helper = ClientHelper(self)
 
     def bind(self):
         try:
@@ -27,16 +29,6 @@ class ClientSocket(AppSocket):
         except Exception as e:
             self.exit(self.format(AppSocket.BIND_ERROR, e), 1)
 
-    def _listen_messages(self):
-        while not self.closed:
-            try:
-                message = self.receive_message()
-                if message.content:
-                    print_message = f'{message.from_whom} > {message.content}'
-                    print(print_message)
-            except socket.error:
-                self.exit(self.format(AppSocket.UNKNOWN_PROBLEM), 1)
-
     def connect(self):
         try:
             self.socket.connect((self.config['s_address'], self.config['s_port']))
@@ -44,10 +36,12 @@ class ClientSocket(AppSocket):
         except Exception as e:
             self.exit(self.format(AppSocket.CONNECTION_ERROR, e), 1)
 
-    def start_listen_messages(self):
-        listen_thread = threading.Thread(target=self._listen_messages, daemon=True)
+    def start_listen_server_messages(self):
+        listen_thread = threading.Thread(target=self.client_helper.listen_messages, daemon=True, name='listen_messages')
         listen_thread.start()
 
     def start(self):
         self.connect()
-        self.start_listen_messages()
+        self.client_helper.set_user()
+        self.start_listen_server_messages()
+        self.client_helper.listen_client_messages()
