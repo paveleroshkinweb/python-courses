@@ -32,7 +32,7 @@ class ServerSocket(AppSocket):
     def start(self):
         self._listen()
         with ThreadPoolExecutor(max_workers=ServerSocket.MAX_CLIENTS) as executor:
-            while True:
+            while not self.closed:
                 client_socket, address = self.socket.accept()
                 logging.info(f'Client connected from {address[0]}:{address[1]}')
                 wrapped_socket = SocketHelper(client_socket)
