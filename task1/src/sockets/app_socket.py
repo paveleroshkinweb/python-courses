@@ -12,6 +12,7 @@ class AppSocket(SocketHelper):
     CONNECTION_SUCCESS = "Client {address}:{port} connected to {s_address}:{s_port}"
     LISTEN_ERROR = "Can't start server on {address}:{port}"
     LISTEN_SUCCESS = "Server listen {address}:{port}"
+    UNKNOWN_PROBLEM = "Something went wrong, closing connection from {address}:{port} to {s_address}:{s_port}"
 
     def __init__(self, config, use_logging=True):
         super().__init__(socket.socket(socket.AF_INET, socket.SOCK_STREAM), use_logging)
