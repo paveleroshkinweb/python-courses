@@ -12,8 +12,6 @@ class Message(Entity):
                  content=None,
                  selected_users=None,
                  command=None,
-                 success=None,
-                 error=None,
                  timestamp=None
                  ):
         self.message_type = message_type
@@ -22,8 +20,6 @@ class Message(Entity):
         self.system_type = system_type
         self.selected_users = selected_users
         self.command = command
-        self.success = success
-        self.error = error
         self.timestamp = timestamp or time.time()
 
     @staticmethod
