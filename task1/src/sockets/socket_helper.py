@@ -1,14 +1,13 @@
 import socket
 import logging
-import threading
 from contextlib import suppress
 from exceptions.socket_closed import SocketIOError
 from models.message import Message
 from models.entity import Entity
-from utils.lock import lock
+from utils.decorators import check_if_socket_closed
 
 
-@lock(['close', 'send_message', 'receive_message', 'broadcast_message', 'send'], threading.RLock)
+@check_if_socket_closed(['close', 'send_message', 'receive_message', 'broadcast_message', 'send', '_recv_all'])
 class SocketHelper:
 
     def __init__(self, sock, use_logging=True):
