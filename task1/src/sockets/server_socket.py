@@ -13,7 +13,7 @@ class ServerSocket(AppSocket):
 
     def __init__(self, config):
         super().__init__(config, use_logging=True)
-        self.users = {}
+        self.client_handlers = {}
 
     def bind(self):
         try:
@@ -36,5 +36,5 @@ class ServerSocket(AppSocket):
                 client_socket, address = self.socket.accept()
                 logging.info(f'Client connected from {address[0]}:{address[1]}')
                 wrapped_socket = SocketHelper(client_socket)
-                client_handler = ClientHandler(wrapped_socket, address, self)
+                client_handler = ClientHandler(wrapped_socket, address, self.client_handlers)
                 executor.submit(client_handler.handle)
