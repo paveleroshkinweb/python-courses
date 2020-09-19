@@ -1,21 +1,16 @@
 import socket
 import logging
 from contextlib import suppress
+from models.message import Message
 from .app_socket import AppSocket
 
 
 class ClientSocket(AppSocket):
 
-    NO_FREE_PORTS_ERROR = 'No free ports available, please try later'
-    BIND_ERROR = "Can't bind to {address}"
-    CONNECTION_ERROR = "Can't connect to {s_address}:{s_port} from {address}:{port}"
-    CONNECTION_SUCCESS = "Client {address}:{port} connected to {s_address}:{s_port}"
-
     def __init__(self, config):
-        super().__init__(config)
-        self._configure()
+        super().__init__(config, use_logging=False)
 
-    def _configure(self):
+    def bind(self):
         try:
             if self.config['port']:
                 self.socket.bind((self.config['address'], self.config['port']))
@@ -26,21 +21,16 @@ class ClientSocket(AppSocket):
                         self.config['port'] = port
                         break
                 else:
-                    self.exit(ClientSocket.NO_FREE_PORTS, 1)
-        except socket.error as e:
-            self.exit(ClientSocket.BIND_ERROR.format(**self.config) + f'\n{e}', 1)
+                    self.exit(self.format(AppSocket.NO_FREE_PORTS_ERROR), 1)
+        except Exception as e:
+            self.exit(self.format(AppSocket.BIND_ERROR, e), 1)
 
     def _connect(self):
         try:
             self.socket.connect((self.config['s_address'], self.config['s_port']))
-            logging.info(ClientSocket.CONNECTION_SUCCESS.format(**self.config))
-        except socket.error as e:
-            self.exit(ClientSocket.CONNECTION_ERROR.format(**self.config) + f'\n{e}', 1)
-
-    def _set_name(self):
-        while True:
-            pass
+            logging.info(self.format(AppSocket.CONNECTION_SUCCESS))
+        except Exception as e:
+            self.exit(self.format(AppSocket.CONNECTION_ERROR, e), 1)
 
     def start(self):
         self._connect()
-        self._set_name()
