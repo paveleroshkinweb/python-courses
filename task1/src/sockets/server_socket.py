@@ -2,7 +2,6 @@ import socket
 from concurrent.futures import ThreadPoolExecutor
 import logging
 from .app_socket import AppSocket
-from .socket_helper import SocketHelper
 from handlers.client_handler import ClientHandler
 
 
@@ -35,6 +34,5 @@ class ServerSocket(AppSocket):
             while not self.closed:
                 client_socket, address = self.socket.accept()
                 logging.info(f'Client connected from {address[0]}:{address[1]}')
-                wrapped_socket = SocketHelper(client_socket)
-                client_handler = ClientHandler(wrapped_socket, address, self.client_handlers)
+                client_handler = ClientHandler(client_socket, address, self.client_handlers)
                 executor.submit(client_handler.handle)

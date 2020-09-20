@@ -1,10 +1,10 @@
-from .socket_helper import SocketHelper
+from .socket_mixin import SocketMixin
 import socket
 import sys
 import logging
 
 
-class AppSocket(SocketHelper):
+class AppSocket(SocketMixin):
 
     NO_FREE_PORTS_ERROR = 'No free ports available, please try later'
     BIND_ERROR = "Can't bind to {address}:{port}"

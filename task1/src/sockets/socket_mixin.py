@@ -8,7 +8,7 @@ from utils.decorators import check_if_socket_closed
 
 
 @check_if_socket_closed(['close', 'send_message', 'receive_message', 'broadcast_message', 'send', '_recv_all'])
-class SocketHelper:
+class SocketMixin:
 
     def __init__(self, sock, use_logging=True):
         self.socket = sock
