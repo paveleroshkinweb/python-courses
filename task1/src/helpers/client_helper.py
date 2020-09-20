@@ -5,8 +5,6 @@ from models.user import User
 
 class ClientHelper:
 
-
-
     def __init__(self, client_socket):
         self.client_socket = client_socket
         self.user = None
@@ -28,24 +26,23 @@ class ClientHelper:
     def set_user(self):
         try:
             text = input('Username: ')
-            message = ClientHelper.parse_text(text)
+            message = self.parse_text(text)
             self.client_socket.send_message(message)
             response = self.recv_and_show_new_message()
             if not response.success:
                 self.set_user()
             else:
                 self.user = User(message.content)
-        except socket.error:
-            self.client_socket.exit(self.client_socket.format(AppSocket.UNKNOWN_PROBLEM), 1)
+        except socket.error as e:
+            self.client_socket.exit(self.client_socket.format(AppSocket.UNKNOWN_PROBLEM, e), 1)
 
     def listen_client_messages(self):
         try:
             while not self.client_socket.closed:
                 text = input(f'{self.user} > ')
                 # TO DO
-        except socket.error:
-            self.client_socket.exit(self.client_socket.format(AppSocket.UNKNOWN_PROBLEM), 1)
+        except socket.error as e:
+            self.client_socket.exit(self.client_socket.format(AppSocket.UNKNOWN_PROBLEM, e), 1)
 
-    @staticmethod
     def parse_text(text):
         pass

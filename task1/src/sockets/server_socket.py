@@ -32,7 +32,10 @@ class ServerSocket(AppSocket):
         self._listen()
         with ThreadPoolExecutor(max_workers=ServerSocket.MAX_CLIENTS) as executor:
             while not self.closed:
-                client_socket, address = self.socket.accept()
-                logging.info(f'Client connected from {address[0]}:{address[1]}')
-                client_handler = ClientHandler(client_socket, address, self.client_handlers)
-                executor.submit(client_handler.handle)
+                try:
+                    client_socket, address = self.socket.accept()
+                    logging.info(f'Client connected from {address[0]}:{address[1]}')
+                    client_handler = ClientHandler(client_socket, address, self.client_handlers)
+                    executor.submit(client_handler.handle)
+                except socket.error as e:
+                    self.exit(self.format(AppSocket.UNKNOWN_PROBLEM, e), 1)
