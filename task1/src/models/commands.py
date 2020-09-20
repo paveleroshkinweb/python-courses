@@ -1,10 +1,16 @@
-import enum
+from .enumerator import Enumerator
 
 
-class Commands(str, enum.Enum):
+class Commands(Enumerator):
+
     ROCK_PAPER_SCISSORS = 'rock-paper-scissors',
     PARTICIPANTS_COUNT = 'participants-count',
     PARTICIPANTS = 'participants',
     PRIVATE_MESSAGE = 'private-message',
     GAME_STEP = 'game-step'
+
+    @staticmethod
+    def list():
+        return Enumerator.list(Commands)
+
 

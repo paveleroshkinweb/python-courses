@@ -45,15 +45,14 @@ class ClientHelper:
             )
 
     def listen_client_messages(self):
-        self.user = User('pety')
         try:
-            while True:
-            # while not self.client_socket.closed:
+            while not self.client_socket.closed:
                 text = input(f'{self.user.name} > ').strip()
                 try:
                     message = self.parse_text(text)
-                    print(message)
-                    # self.client_socket.send_message(message)
+                    self.client_socket.send_message(message)
+                    if message.system_type == SystemTypes.EXIT:
+                        self.client_socket.exit('Disconnecting from server...')
                 except ValueError as e:
                     print(e)
         except socket.error as e:
@@ -107,11 +106,11 @@ class ClientHelper:
     def parse_text(self, text):
         processors = [
             (r'!EXIT!', lambda _: self._exit_message()),
-            (r'cmd!%s' % Commands.PARTICIPANTS_COUNT.value, lambda _: self._command_message(Commands.PARTICIPANTS_COUNT)),
-            (r'cmd!%s' % Commands.PARTICIPANTS.value, lambda _: self._command_message(Commands.PARTICIPANTS)),
-            (r'cmd!%s' % Commands.ROCK_PAPER_SCISSORS.value, lambda _: self._command_message(Commands.ROCK_PAPER_SCISSORS)),
-            (r'cmd!%s:(.+)' % Commands.GAME_STEP.value, lambda regex: self._process_game_step(regex, text)),
-            (r'cmd!%s(.+):(.+)' % Commands.PRIVATE_MESSAGE.value, lambda regex: self._process_private_message(regex, text)),
+            (r'cmd!%s' % Commands.PARTICIPANTS_COUNT, lambda _: self._command_message(Commands.PARTICIPANTS_COUNT)),
+            (r'cmd!%s' % Commands.PARTICIPANTS, lambda _: self._command_message(Commands.PARTICIPANTS)),
+            (r'cmd!%s' % Commands.ROCK_PAPER_SCISSORS, lambda _: self._command_message(Commands.ROCK_PAPER_SCISSORS)),
+            (r'cmd!%s:(.+)' % Commands.GAME_STEP, lambda regex: self._process_game_step(regex, text)),
+            (r'cmd!%s(.+):(.+)' % Commands.PRIVATE_MESSAGE, lambda regex: self._process_private_message(regex, text)),
             (r'.+', lambda _: self._text_message(text))
         ]
         for pattern, command in processors:

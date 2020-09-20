@@ -1,8 +1,12 @@
-import enum
+from .enumerator import Enumerator
 
 
-class MessageTypes(str, enum.Enum):
+class MessageTypes(Enumerator):
+
     TEXT = 'text',
     COMMAND = 'command',
     SYSTEM = 'system'
 
+    @staticmethod
+    def list():
+        return Enumerator.list(MessageTypes)
