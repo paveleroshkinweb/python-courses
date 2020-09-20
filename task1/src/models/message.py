@@ -13,7 +13,6 @@ class Message(Entity):
                  selected_users=None,
                  command=None,
                  success=None,
-                 timestamp=None
                  ):
         self.message_type = message_type
         self.content = content
@@ -22,7 +21,6 @@ class Message(Entity):
         self.selected_users = selected_users
         self.command = command
         self.success = success
-        self.timestamp = timestamp or time.time()
 
     @staticmethod
     def from_bytes(obj_bytes):

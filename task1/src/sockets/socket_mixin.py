@@ -35,7 +35,7 @@ class SocketMixin:
     def broadcast_message(self, message, sockets):
         packet_length, packet = message.to_bytes()
         for sock in sockets:
-            if self.socket != sock:
+            if self.socket.fileno() != sock.socket.fileno():
                 with suppress(SocketIOError):
                     sock.send(packet_length, packet)
 

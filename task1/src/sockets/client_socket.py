@@ -25,16 +25,16 @@ class ClientSocket(AppSocket):
                         self.config['port'] = port
                         break
                 else:
-                    self.exit(self.format(AppSocket.NO_FREE_PORTS_ERROR), 1)
+                    self.exit(self.format(self.NO_FREE_PORTS_ERROR), 1)
         except Exception as e:
-            self.exit(self.format(AppSocket.BIND_ERROR, e), 1)
+            self.exit(self.format(self.BIND_ERROR, e), 1)
 
     def connect(self):
         try:
             self.socket.connect((self.config['s_address'], self.config['s_port']))
-            logging.info(self.format(AppSocket.CONNECTION_SUCCESS))
+            logging.info(self.format(self.CONNECTION_SUCCESS))
         except Exception as e:
-            self.exit(self.format(AppSocket.CONNECTION_ERROR, e), 1)
+            self.exit(self.format(self.CONNECTION_ERROR, e), 1)
 
     def start_listen_server_messages(self):
         listen_thread = threading.Thread(target=self.client_helper.listen_messages,

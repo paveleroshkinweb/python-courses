@@ -12,7 +12,7 @@ class Entity:
     def to_bytes(self):
         json_obj = self.to_json()
         packet = json_obj.encode()
-        packet_length = Entity.header_struct.pack(len(packet))
+        packet_length = self.header_struct.pack(len(packet))
         return packet_length, packet
 
     @staticmethod

@@ -24,4 +24,3 @@ def check_if_socket_closed(methodnames):
         return cls
 
     return lambda cls: _check_cls(cls, methodnames)
-

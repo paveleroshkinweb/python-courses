@@ -19,14 +19,14 @@ class ServerSocket(AppSocket):
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.socket.bind((self.config['address'], self.config['port']))
         except Exception as e:
-            self.exit(self.format(AppSocket.BIND_ERROR, e), 1)
+            self.exit(self.format(self.BIND_ERROR, e), 1)
 
     def _listen(self):
         try:
             self.socket.listen(ServerSocket.BACKLOG)
-            logging.info(ServerSocket.LISTEN_SUCCESS.format(**self.config))
+            logging.info(self.LISTEN_SUCCESS.format(**self.config))
         except Exception as e:
-            self.exit(self.format(AppSocket.LISTEN_ERROR, e), 1)
+            self.exit(self.format(self.LISTEN_ERROR, e), 1)
 
     def start(self):
         self._listen()
@@ -38,4 +38,4 @@ class ServerSocket(AppSocket):
                     client_handler = ClientHandler(client_socket, self.client_handlers)
                     executor.submit(client_handler.handle)
                 except socket.error as e:
-                    self.exit(self.format(AppSocket.UNKNOWN_PROBLEM, e), 1)
+                    self.exit(self.format(self.UNKNOWN_PROBLEM, e), 1)
