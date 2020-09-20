@@ -35,7 +35,7 @@ class ServerSocket(AppSocket):
                 try:
                     client_socket, address = self.socket.accept()
                     logging.info(f'Client connected from {address[0]}:{address[1]}')
-                    client_handler = ClientHandler(client_socket, address, self.client_handlers)
+                    client_handler = ClientHandler(client_socket, self.client_handlers)
                     executor.submit(client_handler.handle)
                 except socket.error as e:
                     self.exit(self.format(AppSocket.UNKNOWN_PROBLEM, e), 1)

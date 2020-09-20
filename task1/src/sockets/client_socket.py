@@ -37,7 +37,9 @@ class ClientSocket(AppSocket):
             self.exit(self.format(AppSocket.CONNECTION_ERROR, e), 1)
 
     def start_listen_server_messages(self):
-        listen_thread = threading.Thread(target=self.client_helper.listen_messages, daemon=True, name='listen_messages')
+        listen_thread = threading.Thread(target=self.client_helper.listen_messages,
+                                         daemon=True,
+                                         name='listen_messages')
         listen_thread.start()
 
     def start(self):

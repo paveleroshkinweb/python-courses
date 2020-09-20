@@ -16,11 +16,9 @@ class SocketMixin:
         self.use_logging = use_logging
 
     def close(self):
-        try:
+        with suppress(Exception):
             self.socket.close()
             self.closed = True
-        except socket.error as e:
-            self.log_error(f"Couldn't close socket {self.socket.getsockname}\n{e}")
 
     def send_message(self, message):
         packet_length, packet = message.to_bytes()
