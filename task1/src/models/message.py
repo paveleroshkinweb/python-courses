@@ -7,7 +7,7 @@ class Message(Entity):
 
     def __init__(self,
                  message_type,
-                 from_whom,
+                 from_whom=None,
                  system_type=None,
                  content=None,
                  selected_users=None,
