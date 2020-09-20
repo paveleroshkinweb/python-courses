@@ -16,7 +16,7 @@ class ClientHelper:
     def recv_and_show_new_message(self):
         message = self.client_socket.receive_message()
         if message.content:
-            print_message = f'{message.from_whom} > {message.content}'
+            print_message = f'{message.sender} > {message.content}'
             print(print_message)
         return message
 
@@ -70,14 +70,14 @@ class ClientHelper:
     def _exit_message(self):
         return Message(**{
             'message_type': MessageTypes.SYSTEM,
-            'from_whom': self.user.name,
+            'sender': self.user.name,
             'system_type': SystemTypes.EXIT
         })
 
     def _command_message(self, command, **kwargs):
         return Message(**{
             'message_type': MessageTypes.COMMAND,
-            'from_whom': self.user.name,
+            'sender': self.user.name,
             'command': command,
             **kwargs
         })
@@ -85,7 +85,7 @@ class ClientHelper:
     def _text_message(self, content):
         return Message(**{
             'message_type': MessageTypes.TEXT,
-            'from_whom': self.user.name,
+            'sender': self.user.name,
             'content': content
         })
 
