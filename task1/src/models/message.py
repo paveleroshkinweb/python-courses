@@ -6,7 +6,7 @@ from .entity import Entity
 class Message(Entity):
 
     def __init__(self,
-                 message_type,
+                 message_type=None,
                  sender=None,
                  system_type=None,
                  content=None,

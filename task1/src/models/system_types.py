@@ -3,7 +3,7 @@ from .enumerator import Enumerator
 
 class SystemTypes(Enumerator):
 
-    CREATE_NEW_USER = 'create_new_user'
+    NEW_USER = 'new_user'
     EXIT = 'exit'
 
     @staticmethod
