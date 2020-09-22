@@ -1,4 +1,4 @@
-from exceptions.socket_closed import SocketIOError
+from src.exceptions.socket_closed import SocketIOError
 
 
 def check_if_socket_closed(methodnames):

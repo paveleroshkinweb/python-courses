@@ -1,10 +1,10 @@
 import socket
 import logging
 from contextlib import suppress
-from exceptions.socket_closed import SocketIOError
-from models.message import Message
-from models.entity import Entity
-from utils.decorators import check_if_socket_closed
+from src.exceptions.socket_closed import SocketIOError
+from src.models.message import Message
+from src.models.entity import Entity
+from src.utils.decorators import check_if_socket_closed
 
 
 @check_if_socket_closed(['send_message', 'receive_message', 'broadcast_message', 'send', '_recv_all'])

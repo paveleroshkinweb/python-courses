@@ -1,11 +1,10 @@
 import socket
 import logging
 from contextlib import suppress
-import sys
-from models.message import Message
+
 import threading
 from .app_socket import AppSocket
-from helpers.client_helper import ClientHelper
+from src.helpers.client_helper import ClientHelper
 
 
 class ClientSocket(AppSocket):

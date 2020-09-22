@@ -2,7 +2,7 @@ import socket
 from concurrent.futures import ThreadPoolExecutor
 import logging
 from .app_socket import AppSocket
-from handlers.client_handler import ClientHandler
+from src.handlers.client_handler import ClientHandler
 
 
 class ServerSocket(AppSocket):

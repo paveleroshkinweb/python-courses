@@ -1,9 +1,9 @@
 import socket
-from models.user import User
-from models.message import Message
-from models.message_types import MessageTypes
-from models.system_types import SystemTypes
-from models.commands import Commands
+from src.models.user import User
+from src.models.message import Message
+from src.models.message_types import MessageTypes
+from src.models.system_types import SystemTypes
+from src.models.commands import Commands
 import re
 
 

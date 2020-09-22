@@ -1,5 +1,5 @@
-from sockets.client_socket import ClientSocket
-from utils.parse_cli_params import get_client_config
+from src.sockets.client_socket import ClientSocket
+from src.utils.parse_cli_params import get_client_config
 import logging
 import signal
 
