@@ -38,7 +38,7 @@ class ClientHelper:
             if not response.success:
                 self.set_user()
             else:
-                self.user = User(message.name)
+                self.user = User(message.content)
         except socket.error as e:
             self.client_socket.exit(
                 self.client_socket.format(self.client_socket.UNKNOWN_PROBLEM, e), 1
@@ -47,7 +47,7 @@ class ClientHelper:
     def listen_client_messages(self):
         try:
             while not self.client_socket.closed:
-                text = input(f'{self.user.name} > ').strip()
+                text = input().strip()
                 try:
                     message = self.parse_text(text)
                     self.client_socket.send_message(message)
@@ -64,20 +64,18 @@ class ClientHelper:
         return Message(**{
             'message_type': MessageTypes.SYSTEM,
             'content': name,
-            'system_type': SystemTypes.CREATE_NEW_USER,
+            'system_type': SystemTypes.NEW_USER,
         })
 
     def _exit_message(self):
         return Message(**{
             'message_type': MessageTypes.SYSTEM,
-            'sender': self.user.name,
             'system_type': SystemTypes.EXIT
         })
 
     def _command_message(self, command, **kwargs):
         return Message(**{
             'message_type': MessageTypes.COMMAND,
-            'sender': self.user.name,
             'command': command,
             **kwargs
         })
@@ -85,7 +83,6 @@ class ClientHelper:
     def _text_message(self, content):
         return Message(**{
             'message_type': MessageTypes.TEXT,
-            'sender': self.user.name,
             'content': content
         })
 
@@ -105,12 +102,12 @@ class ClientHelper:
 
     def parse_text(self, text):
         processors = [
-            (r'!EXIT!', lambda _: self._exit_message()),
-            (r'cmd!%s' % Commands.PARTICIPANTS_COUNT, lambda _: self._command_message(Commands.PARTICIPANTS_COUNT)),
-            (r'cmd!%s' % Commands.PARTICIPANTS, lambda _: self._command_message(Commands.PARTICIPANTS)),
-            (r'cmd!%s' % Commands.ROCK_PAPER_SCISSORS, lambda _: self._command_message(Commands.ROCK_PAPER_SCISSORS)),
-            (r'cmd!%s:(.+)' % Commands.GAME_STEP, lambda regex: self._process_game_step(regex, text)),
-            (r'cmd!%s(.+):(.+)' % Commands.PRIVATE_MESSAGE, lambda regex: self._process_private_message(regex, text)),
+            (r'^!EXIT!$', lambda _: self._exit_message()),
+            (r'^cmd!%s$' % Commands.PARTICIPANTS_COUNT, lambda _: self._command_message(Commands.PARTICIPANTS_COUNT)),
+            (r'^cmd!%s$' % Commands.PARTICIPANTS, lambda _: self._command_message(Commands.PARTICIPANTS)),
+            (r'^cmd!%s$' % Commands.ROCK_PAPER_SCISSORS, lambda _: self._command_message(Commands.ROCK_PAPER_SCISSORS)),
+            (r'^cmd!%s:(.+)$' % Commands.GAME_STEP, lambda regex: self._process_game_step(regex, text)),
+            (r'^cmd!%s(.+):(.+)$' % Commands.PRIVATE_MESSAGE, lambda regex: self._process_private_message(regex, text)),
             (r'.+', lambda _: self._text_message(text))
         ]
         for pattern, command in processors:
