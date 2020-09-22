@@ -2,6 +2,7 @@ from .socket_mixin import SocketMixin
 import socket
 import sys
 import logging
+import os
 
 
 class AppSocket(SocketMixin):
@@ -30,7 +31,8 @@ class AppSocket(SocketMixin):
                 logging.error(msg)
             else:
                 logging.info(msg)
-        exit(code)
+        # The only way I found how to send a signal to whole application instead of just thread
+        os._exit(code)
 
     def format(self, format_string, err=None):
         return format_string.format(**self.config) + (f'\n{err}' if err else '')
