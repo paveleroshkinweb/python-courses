@@ -1,5 +1,5 @@
 from models.message import Message
-from exceptions.invalid_message import InvalidMessage
+from src.exceptions.invalid_message import InvalidMessage
 
 
 class Handler:

@@ -1,6 +1,6 @@
 import logging
-from sockets.server_socket import ServerSocket
-from utils.parse_cli_params import get_server_config
+from src.sockets.server_socket import ServerSocket
+from src.utils.parse_cli_params import get_server_config
 import signal
 
 

@@ -3,9 +3,9 @@ from .handler import Handler
 from .command_handler import CommandHandler
 from .system_handler import SystemHandler
 from .text_handler import TextHandler
-from exceptions.invalid_message import InvalidMessage
-from sockets.socket_mixin import SocketMixin
-from models.message_types import MessageTypes
+from src.exceptions.invalid_message import InvalidMessage
+from src.sockets.socket_mixin import SocketMixin
+from src.models.message_types import MessageTypes
 
 
 class ClientHandler(Handler, SocketMixin):

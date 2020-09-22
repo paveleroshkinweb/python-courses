@@ -1,7 +1,7 @@
 from .message_handler import MessageHandler
-from models.commands import Commands
-from exceptions.invalid_message import InvalidMessage
-from models.game_steps import GameSteps
+from src.models.commands import Commands
+from src.exceptions.invalid_message import InvalidMessage
+from src.models.game_steps import GameSteps
 import random
 
 

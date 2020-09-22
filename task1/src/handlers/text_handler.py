@@ -1,5 +1,5 @@
 from .message_handler import MessageHandler
-from exceptions.invalid_message import InvalidMessage
+from src.exceptions.invalid_message import InvalidMessage
 
 
 class TextHandler(MessageHandler):
