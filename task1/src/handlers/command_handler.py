@@ -3,6 +3,7 @@ from src.models.commands import Commands
 from src.exceptions.invalid_message import InvalidMessage
 from src.models.game_steps import GameSteps
 import random
+import time
 
 
 class CommandHandler(MessageHandler):
@@ -17,7 +18,8 @@ class CommandHandler(MessageHandler):
             Commands.PARTICIPANTS_COUNT: self.handle_participants_count,
             Commands.ROCK_PAPER_SCISSORS: self.handle_rock_paper_scissors,
             Commands.GAME_STEP: lambda: self.handle_game_step(message),
-            Commands.PRIVATE_MESSAGE: lambda: self.handle_private_message(message)
+            Commands.PRIVATE_MESSAGE: lambda: self.handle_private_message(message),
+            Commands.SERVER_TIME: self.handle_server_time_message
         }
         handler = handlers[message.command]
         handler()
@@ -73,6 +75,12 @@ class CommandHandler(MessageHandler):
             self.client_handler.send_message(
                 self.form_error_server_msg(content=f'These users are absent: {", ".join(absent_users)}')
             )
+
+    def handle_server_time_message(self):
+        uptime_ms = time.time() - self.client_handler.server_info['socket_start_time']
+        formatted_time = time.strftime("%Hh %Mm %Ss", time.gmtime(uptime_ms))
+        response = self.form_success_server_msg(content=f'Server uptime: {formatted_time}')
+        self.client_handler.send_message(response)
 
     def validate_message(self, message):
         super().validate_message(message, ['command'], [('command', Commands.list())])

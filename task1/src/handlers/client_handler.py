@@ -10,7 +10,7 @@ from src.models.message_types import MessageTypes
 
 class ClientHandler(Handler, SocketMixin):
 
-    def __init__(self, sock, handlers):
+    def __init__(self, sock, handlers, server_info):
         Handler.__init__(self)
         SocketMixin.__init__(self, sock)
         self.message_handlers = {
@@ -21,6 +21,7 @@ class ClientHandler(Handler, SocketMixin):
         self.handlers = handlers
         self.active_game = None
         self.user = None
+        self.server_info = server_info
 
     def handle(self):
         logging.info(f'Handling the client from {self.socket.getsockname()}')
