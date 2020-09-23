@@ -2,6 +2,7 @@ from src.exceptions.invalid_message import InvalidMessage
 from .message_handler import MessageHandler
 from src.models.system_types import SystemTypes
 from src.models.user import User
+from src.models.message_types import MessageTypes
 import re
 
 
@@ -16,11 +17,13 @@ class SystemHandler(MessageHandler):
             new_user = User(message.content)
             self.client_handler.user = new_user
             self.client_handler.handlers[new_user.name] = self.client_handler
-            response = self.form_success_server_msg(content=f'User {new_user.name} entered chat')
+            response = self.form_success_server_msg(content=f'User {new_user.name} entered chat',
+                                                    message_type=MessageTypes.SYSTEM)
             self.client_handler.broadcast_message_to_everyone(response)
             self.client_handler.send_message(response)
         elif message.system_type == SystemTypes.EXIT:
-            response = self.form_success_server_msg(content=f'User {self.client_handler.user.name} left chat')
+            response = self.form_success_server_msg(content=f'User {self.client_handler.user.name} left chat',
+                                                    message_type=MessageTypes.SYSTEM)
             self.client_handler.broadcast_message_to_everyone(response)
             self.client_handler.close()
 

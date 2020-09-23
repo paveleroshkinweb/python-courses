@@ -2,6 +2,7 @@ from .message_handler import MessageHandler
 from src.models.commands import Commands
 from src.exceptions.invalid_message import InvalidMessage
 from src.models.game_steps import GameSteps
+from src.models.message_types import MessageTypes
 import random
 import time
 
@@ -26,17 +27,20 @@ class CommandHandler(MessageHandler):
 
     def handle_participants(self):
         participants = list(self.client_handler.handlers.keys())
-        response = self.form_success_server_msg(content=f'List of participants: {", ".join(participants)}')
+        response = self.form_success_server_msg(content=f'List of participants: {", ".join(participants)}',
+                                                message_type=MessageTypes.TEXT)
         self.client_handler.send_message(response)
 
     def handle_participants_count(self):
         count = len(self.client_handler.handlers)
-        response = self.form_success_server_msg(content=f'The number of participants is {count}')
+        response = self.form_success_server_msg(content=f'The number of participants is {count}',
+                                                message_type=MessageTypes.TEXT)
         self.client_handler.send_message(response)
 
     def handle_rock_paper_scissors(self):
         self.client_handler.active_game = True
-        response = self.form_success_server_msg(content='Rock-paper-scissors game started')
+        response = self.form_success_server_msg(content='Rock-paper-scissors game started',
+                                                message_type=MessageTypes.TEXT)
         self.client_handler.send_message(response)
 
     def handle_game_step(self, message):
@@ -56,7 +60,7 @@ class CommandHandler(MessageHandler):
         else:
             content += 'you lost, the game is over'
             self.client_handler.active_game = False
-        response = self.form_success_server_msg(content=content)
+        response = self.form_success_server_msg(content=content, message_type=MessageTypes.TEXT)
         self.client_handler.send_message(response)
 
     def handle_private_message(self, message):
@@ -79,7 +83,8 @@ class CommandHandler(MessageHandler):
     def handle_server_time_message(self):
         uptime_ms = time.time() - self.client_handler.server_info['socket_start_time']
         formatted_time = time.strftime("%Hh %Mm %Ss", time.gmtime(uptime_ms))
-        response = self.form_success_server_msg(content=f'Server uptime: {formatted_time}')
+        response = self.form_success_server_msg(content=f'Server uptime: {formatted_time}',
+                                                message_type=MessageTypes.TEXT)
         self.client_handler.send_message(response)
 
     def validate_message(self, message):
