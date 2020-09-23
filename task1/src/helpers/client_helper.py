@@ -111,7 +111,7 @@ class ClientHelper:
             (r'^cmd!%s$' % Commands.ROCK_PAPER_SCISSORS, lambda _: self._command_message(Commands.ROCK_PAPER_SCISSORS)),
             (r'^cmd!%s:(.+)$' % Commands.GAME_STEP, lambda regex: self._process_game_step(regex, text)),
             (r'^cmd!%s(.+):(.+)$' % Commands.PRIVATE_MESSAGE, lambda regex: self._process_private_message(regex, text)),
-            (r'^cmd!%s$' % Commands.SERVER_TIME, lambda regex: self._process_server_time_message()),
+            (r'^cmd!%s$' % Commands.SERVER_TIME, lambda _: self._process_server_time_message()),
             (r'.+', lambda _: self._text_message(text))
         ]
         for pattern, command in processors:
