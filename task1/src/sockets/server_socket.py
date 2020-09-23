@@ -1,6 +1,7 @@
 import socket
-from concurrent.futures import ThreadPoolExecutor
 import logging
+import time
+from concurrent.futures import ThreadPoolExecutor
 from .app_socket import AppSocket
 from src.handlers.client_handler import ClientHandler
 
@@ -12,6 +13,7 @@ class ServerSocket(AppSocket):
 
     def __init__(self, config):
         super().__init__(config, use_logging=True)
+        self.SOCKET_START_TIME = None
         self.handlers = {}
 
     def bind(self):
@@ -30,12 +32,14 @@ class ServerSocket(AppSocket):
 
     def start(self):
         self._listen()
+        self.SOCKET_START_TIME = time.time()
         with ThreadPoolExecutor(max_workers=ServerSocket.MAX_CLIENTS) as executor:
             while not self.closed:
                 try:
                     client_socket, address = self.socket.accept()
                     logging.info(f'Client connected from {address[0]}:{address[1]}')
-                    client_handler = ClientHandler(client_socket, self.handlers)
+                    client_handler = ClientHandler(client_socket, self.handlers,
+                                                   {"socket_start_time": self.SOCKET_START_TIME})
                     executor.submit(client_handler.handle)
                 except socket.error as e:
                     self.exit(self.format(self.UNKNOWN_PROBLEM, e), 1)
