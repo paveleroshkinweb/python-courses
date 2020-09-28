@@ -13,11 +13,21 @@ python3 server.py
 ```
 Note: there must be only one instance of a server that will run locally on 15397 port.
 
+Server allows following launch parameters: 
+* `-address` for binding server address, 
+* `-port` for binding server port.
+
 To start client, within project folder execute the following:
 ```bash
 python3 client.py
 ```
 Note: server accepts up to 2048 clients.
+
+Client allows following launch parameters: 
+* `-s_address` for binding server address,
+* `-s_port` for binding server port,
+* `-address` for binding client address,
+* `-port` for binding client port.
 
 ## Features
 Socket Chat allows chatting within one room between currently connected users. 
