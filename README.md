@@ -79,7 +79,7 @@ cmd!server-time
 server > Server uptime: 00h 41m 03s
 ```
 
-### `Ctrl + C` to leave chat or type !EXIT!
+### `Ctrl + C` or type !EXIT! to leave chat
 Leave chat at anytime by using world-known interruption key combination or type message !EXIT!!
 Example:
 ```
